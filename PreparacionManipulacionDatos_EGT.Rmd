@@ -3,8 +3,8 @@ title: "PreparacionManipulacionDatos_EGT"
 author: "Elena Garcia Torres"
 date: "28 de diciembre de 2016"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
   word_document: default
 ---
 
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # 1. Enunciado
-  {
+
   # En esta Actividad deberas codificar y comentar las acciones necesarias a realizar sobre un "messy dataset" para convertirlo en un "tidy dataset", limpio en contenido, y con un formato adecuado, que lo haga susceptible de ser utilizado en un proceso de Analisis de datos.
   # Se deberan explicar las acciones con texto, y codificarlas en R, en un script R Markdown (http://rmarkdown.rstudio.com/) en el que se incluira el codigo R y las explicaciones convenientes, y, opcionalmente, si ayudan a explicar las acciones, graficos.
   # Aunque quien quiera, puede utilizar un dataset de su eleccion, se propone este "messy dataset":
@@ -38,136 +38,89 @@ knitr::opts_chunk$set(echo = TRUE)
   # 5. Conclusiones.
   # 6. Opcionalmente, se pueden incluir graficos si se consideraran necesarios.
 
-}
-
 # 2. Objetivo 
-{
+
   # Limpiar el dataset y prepararlo para posibles analisis/modelos.
-}
 
 # 3. Lectura del dataset en R.
-{
-library (xlsx)
-streets <- read.xlsx2("./data/EXAMPLE_DataToClean.xlsx", sheetIndex=1, row.names=NULL, header=TRUE)
-  # View (streets)
-}
+
+    library (xlsx)
+    streets <- read.xlsx2("./data/EXAMPLE_DataToClean.xlsx", sheetIndex=1, row.names=NULL, header=TRUE)
+    # View (streets)
 
 # 4. Acciones de limpieza explicadas en texto y codificadas en R.
-{
 
-col <- ncol (streets)
-
-fila <- nrow(streets)
-
-  # convertir todos los nombres de las columnas a minuscula
-  
-  # names (streets) <- tolower (names (streets))
-  
-  # names (streets)
-
- # se modifican los nombres de las columnas
- 
-names (streets)[2] <- "area"
-
-names (streets) [3] <- "street"
-
-names (streets) [4] <- "street2"
-
-names (streets) [5] <- "html"
-
-  # areas <- c ("Birmingham", "Coventry", "Dudley", "Sandwell",      "Solihull", "Walsall", "Wolverhampton")
-  
-  lapply(streets,class)
-
-  # los campos street, street2 y html aparece como factor, se transforma a caracter
-
-  streets$street <- as.character((streets$street))
-
-  streets$street2 <- as.character((streets$street2))
-
-  streets$html <- as.character((streets$html))
-
-  # se eliminan espacios en blanco al inicio y final de cada campo
-
-  streets$street <- gsub("(^ +)|( +$)", "", streets$street)
-
-  streets$street2 <- gsub("(^ +)|( +$)", "", streets$street2)
-  
-  # se eliminan "." del final
-
-  streets$street <- gsub("([.]+$)", "", streets$street)
-
-  streets$street2 <- gsub("([.]+$)", "", streets$street2)
-  
-  # se sustituye el caracter "a" por " " (espacio) en el campo street
-
-  streets$street <- gsub("a"," ",streets$street)
-  
-  # se pone en minusculas el contenido de street y street2
-
-  streets$street <- tolower (streets$street)
-
-  streets$street2 <- tolower (streets$street2)
-  
-  # se eliminan "," del contenido de street y street2
-  streets$street <- gsub(",","",streets$street)
-
-  streets$street2 <- gsub(",","",streets$street2)
-  
-  # se sustituye "st" por "street" y "rd" por road
-
-  streets$street <- gsub("st","street",streets$street)
-
-  streets$street2 <- gsub("st","street",streets$street2)
-  
-  streets$street <- gsub("rd","road",streets$street)
-
-  streets$street2 <- gsub("rd","road",streets$street2)
-  
-  # traduccion html
-
-  library(xml2)
-
-  unescape_html <- function(str){
-    xml2::xml_text(xml2::read_html(paste0("<x>", str, "</x>")))
-    } 
+    col <- ncol (streets)
+    fila <- nrow(streets)
     
-  # rellenar columna area
+    # convertir todos los nombres de las columnas a minuscula
+    # names (streets) <- tolower (names (streets))
+    # names (streets)
+    
+    # se modifican los nombres de las columnas
+    names (streets)[2] <- "area"
+    names (streets) [3] <- "street"
+    names (streets) [4] <- "street2"
+    names (streets) [5] <- "html"
+    
+    # areas <- c ("Birmingham", "Coventry", "Dudley", "Sandwell",      "Solihull", "Walsall", "Wolverhampton")
+    lapply(streets,class)
+    
+    # los campos street, street2 y html aparece como factor, se transforma a caracter
+    streets$street <- as.character((streets$street))
+    streets$street2 <- as.character((streets$street2))
+    streets$html <- as.character((streets$html))
 
-  for (i in 1:fila){
-
+    # se eliminan espacios en blanco al inicio y final de cada campo
+    streets$street <- gsub("(^ +)|( +$)", "", streets$street)
+    streets$street2 <- gsub("(^ +)|( +$)", "", streets$street2)
+    
+    # se eliminan "." del final
+    streets$street <- gsub("([.]+$)", "", streets$street)
+    streets$street2 <- gsub("([.]+$)", "", streets$street2)
+    
+    # se sustituye el caracter "a" por " " (espacio) en el campo street
+    streets$street <- gsub("a"," ",streets$street)
+    
+    # se pone en minusculas el contenido de street y street2
+    streets$street <- tolower (streets$street)
+    streets$street2 <- tolower (streets$street2)
+    
+    # se eliminan "," del contenido de street y street2
+    streets$street <- gsub(",","",streets$street)
+    streets$street2 <- gsub(",","",streets$street2)
+    
+    # se sustituye "st" por "street" y "rd" por road
+    streets$street <- gsub("st","street",streets$street)
+    streets$street2 <- gsub("st","street",streets$street2)
+    streets$street <- gsub("rd","road",streets$street)
+    streets$street2 <- gsub("rd","road",streets$street2)
+    
+    # traduccion html
+    library(xml2)
+    unescape_html <- function(str){
+    xml2::xml_text(xml2::read_html(paste0("<x>", str, "</x>")))}
+    
+    # rellenar columna area
+    for (i in 1:fila){
     # si el campo area esta vacio, se copia el area de la fila anterior
-
+    
     if ((streets$area [i]=="")){
-
-      streets$area [i] <- streets$area [i-1]}
-      
+        streets$area [i] <- streets$area [i-1]}
     if (!(streets$html [i]=="")){
-
-      # traduccion html
-
-      streets$html [i] <- unescape_html (streets$html [i]) }
+    # traduccion html
+    streets$html [i] <- unescape_html (streets$html [i]) }
   }
- 
-  # se eliminan filas repetidas
-
-  library(dplyr)
-
-  streets <- streets %>% distinct
-
-  nrow(streets)
   
-}
+  # se eliminan filas repetidas
+  library(dplyr)
+  streets <- streets %>% distinct
+  nrow(streets)
 
 # 5. Exportar desde R a un fichero local, el dataset limpio resultante.
-{
-write.xlsx(x = streets, file = "./data/streetsFinal.xlsx",
+    write.xlsx(x = streets, file = "./data/streetsFinal.xlsx",
         sheetName = "TestSheet", row.names = FALSE)
 
-}
-
 # 6. Conclusiones
-{
   # Se ha podido reducir el numero de registros de 5279 a 3442, un 35%.
   # En el fichero resultante se puede observar que podria haber algun resgitro mas repetido, parece haber errores de escritura en alguna de las calles.
-}
